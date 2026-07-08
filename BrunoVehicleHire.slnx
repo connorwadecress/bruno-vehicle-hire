@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BrunoVehicleHire.Api/BrunoVehicleHire.Api.csproj" />
+    <Project Path="src/BrunoVehicleHire.Application/BrunoVehicleHire.Application.csproj" />
+    <Project Path="src/BrunoVehicleHire.Domain/BrunoVehicleHire.Domain.csproj" />
+    <Project Path="src/BrunoVehicleHire.Infrastructure/BrunoVehicleHire.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BrunoVehicleHire.Application.Tests/BrunoVehicleHire.Application.Tests.csproj" />
+  </Folder>
+</Solution>
