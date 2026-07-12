@@ -1,4 +1,5 @@
 using BrunoVehicleHire.Infrastructure;
+using BrunoVehicleHire.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddOpenApi();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' was not found.");
 
+
+builder.Services.AddApplication();
 builder.Services.AddInfrastructure(connectionString);
 
 var app = builder.Build();
