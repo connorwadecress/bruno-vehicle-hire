@@ -1,11 +1,12 @@
-﻿using BrunoVehicleHire.Application.Common.Models;
+﻿using BrunoVehicleHire.Api.Vehicles.Requests;
+using BrunoVehicleHire.Application.Common.Models;
+using BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
+using BrunoVehicleHire.Application.Vehicles.Commands.UpdateVehicle;
 using BrunoVehicleHire.Application.Vehicles.Dtos;
+using BrunoVehicleHire.Application.Vehicles.Queries.GetVehicleByRegistrationNumber;
 using BrunoVehicleHire.Application.Vehicles.Queries.GetVehiclesPage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using BrunoVehicleHire.Application.Vehicles.Queries.GetVehicleByRegistrationNumber;
-using BrunoVehicleHire.Api.Vehicles.Requests;
-using BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
 
 namespace BrunoVehicleHire.Api.Controllers;
 
@@ -92,5 +93,33 @@ public sealed class VehiclesController(ISender sender) : ControllerBase
                 registrationNumber = result.RegistrationNumber
             },
             result);
+    }
+
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(
+        typeof(VehicleDto),
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(
+        typeof(ValidationProblemDetails),
+        StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<VehicleDto>> Update(
+        Guid id,
+        [FromBody] UpdateVehicleRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateVehicleCommand(
+            id,
+            request.Make,
+            request.Model,
+            request.Year);
+
+        var result = await sender.Send(
+            command,
+            cancellationToken);
+
+        return result is null
+            ? NotFound()
+            : Ok(result);
     }
 }
