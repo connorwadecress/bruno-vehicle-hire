@@ -2,6 +2,7 @@
 using BrunoVehicleHire.Application.Common.Models;
 using BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
 using BrunoVehicleHire.Application.Vehicles.Commands.UpdateVehicle;
+using BrunoVehicleHire.Application.Vehicles.Commands.DeleteVehicle;
 using BrunoVehicleHire.Application.Vehicles.Dtos;
 using BrunoVehicleHire.Application.Vehicles.Queries.GetVehicleByRegistrationNumber;
 using BrunoVehicleHire.Application.Vehicles.Queries.GetVehiclesPage;
@@ -121,5 +122,26 @@ public sealed class VehiclesController(ISender sender) : ControllerBase
         return result is null
             ? NotFound()
             : Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(
+        typeof(ValidationProblemDetails),
+        StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteVehicleCommand(id);
+
+        var deleted = await sender.Send(
+            command,
+            cancellationToken);
+
+        return deleted
+            ? NoContent()
+            : NotFound();
     }
 }
