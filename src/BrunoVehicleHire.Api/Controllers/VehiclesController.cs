@@ -3,8 +3,9 @@ using BrunoVehicleHire.Application.Vehicles.Dtos;
 using BrunoVehicleHire.Application.Vehicles.Queries.GetVehiclesPage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
 using BrunoVehicleHire.Application.Vehicles.Queries.GetVehicleByRegistrationNumber;
+using BrunoVehicleHire.Api.Vehicles.Requests;
+using BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
 
 namespace BrunoVehicleHire.Api.Controllers;
 
@@ -38,15 +39,15 @@ public sealed class VehiclesController(ISender sender) : ControllerBase
 
     [HttpGet("registration/{registrationNumber}")]
     [ProducesResponseType(
-    typeof(VehicleDto),
-    StatusCodes.Status200OK)]
+        typeof(VehicleDto),
+        StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(
-    typeof(ValidationProblemDetails),
-    StatusCodes.Status400BadRequest)]
+        typeof(ValidationProblemDetails),
+        StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<VehicleDto>> GetByRegistrationNumber(
-    string registrationNumber,
-    CancellationToken cancellationToken)
+        string registrationNumber,
+        CancellationToken cancellationToken)
     {
         var query = new GetVehicleByRegistrationNumberQuery(
             registrationNumber);
@@ -58,5 +59,38 @@ public sealed class VehiclesController(ISender sender) : ControllerBase
         return result is null
             ? NotFound()
             : Ok(result);
+    }
+
+    [HttpPost]
+    [ProducesResponseType(
+        typeof(VehicleDto),
+        StatusCodes.Status201Created)]
+    [ProducesResponseType(
+        typeof(ValidationProblemDetails),
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(ProblemDetails),
+        StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<VehicleDto>> Create(
+        [FromBody] CreateVehicleRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new CreateVehicleCommand(
+            request.RegistrationNumber,
+            request.Make,
+            request.Model,
+            request.Year);
+
+        var result = await sender.Send(
+            command,
+            cancellationToken);
+
+        return CreatedAtAction(
+            nameof(GetByRegistrationNumber),
+            new
+            {
+                registrationNumber = result.RegistrationNumber
+            },
+            result);
     }
 }
