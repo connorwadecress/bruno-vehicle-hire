@@ -1,6 +1,7 @@
 ﻿using BrunoVehicleHire.Application.Vehicles.Dtos;
 using BrunoVehicleHire.Domain.Entities;
 using BrunoVehicleHire.Domain.Repositories;
+using BrunoVehicleHire.Application.Common.Exceptions;
 using MediatR;
 
 namespace BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
@@ -26,8 +27,7 @@ public sealed class CreateVehicleCommandHandler
 
         if (registrationNumberExists)
         {
-            throw new InvalidOperationException(
-                "A vehicle with this registration number already exists.");
+            throw new DuplicateVehicleRegistrationException();
         }
 
         var vehicle = new Vehicle(

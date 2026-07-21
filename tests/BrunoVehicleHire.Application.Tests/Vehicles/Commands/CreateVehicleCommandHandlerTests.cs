@@ -1,5 +1,6 @@
 using BrunoVehicleHire.Application.Tests.TestDoubles;
 using BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
+using BrunoVehicleHire.Application.Common.Exceptions;
 
 namespace BrunoVehicleHire.Application.Tests.Vehicles.Commands;
 
@@ -44,8 +45,9 @@ public sealed class CreateVehicleCommandHandlerTests
             "Civic",
             2025);
 
-        var exception = await Assert.ThrowsAsync<InvalidOperationException>(
-            () => handler.Handle(command, CancellationToken.None));
+        var exception =
+            await Assert.ThrowsAsync<DuplicateVehicleRegistrationException>(
+                () => handler.Handle(command, CancellationToken.None));
 
         Assert.Equal(
             "A vehicle with this registration number already exists.",
