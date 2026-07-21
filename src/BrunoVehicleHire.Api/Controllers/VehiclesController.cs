@@ -4,6 +4,8 @@ using BrunoVehicleHire.Application.Vehicles.Queries.GetVehiclesPage;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
+using BrunoVehicleHire.Application.Vehicles.Queries.GetVehicleByRegistrationNumber;
+
 namespace BrunoVehicleHire.Api.Controllers;
 
 [ApiController]
@@ -32,5 +34,29 @@ public sealed class VehiclesController(ISender sender) : ControllerBase
             cancellationToken);
 
         return Ok(result);
+    }
+
+    [HttpGet("registration/{registrationNumber}")]
+    [ProducesResponseType(
+    typeof(VehicleDto),
+    StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(
+    typeof(ValidationProblemDetails),
+    StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<VehicleDto>> GetByRegistrationNumber(
+    string registrationNumber,
+    CancellationToken cancellationToken)
+    {
+        var query = new GetVehicleByRegistrationNumberQuery(
+            registrationNumber);
+
+        var result = await sender.Send(
+            query,
+            cancellationToken);
+
+        return result is null
+            ? NotFound()
+            : Ok(result);
     }
 }
