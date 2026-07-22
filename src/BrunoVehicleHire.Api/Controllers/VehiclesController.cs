@@ -1,8 +1,8 @@
 ﻿using BrunoVehicleHire.Api.Vehicles.Requests;
 using BrunoVehicleHire.Application.Common.Models;
 using BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
-using BrunoVehicleHire.Application.Vehicles.Commands.UpdateVehicle;
 using BrunoVehicleHire.Application.Vehicles.Commands.DeleteVehicle;
+using BrunoVehicleHire.Application.Vehicles.Commands.UpdateVehicle;
 using BrunoVehicleHire.Application.Vehicles.Dtos;
 using BrunoVehicleHire.Application.Vehicles.Queries.GetVehicleByRegistrationNumber;
 using BrunoVehicleHire.Application.Vehicles.Queries.GetVehiclesPage;
