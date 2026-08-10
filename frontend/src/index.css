@@ -1,111 +1,145 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+  color: #1e1b4b;
+  background: #eef2ff;
+  font-family: "Fira Sans", "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+* { box-sizing: border-box; }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+body { min-width: 320px; margin: 0; }
+
+button, input { font: inherit; }
+
+button { cursor: pointer; }
+
+button:disabled { cursor: not-allowed; }
+
+a { color: inherit; }
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 10;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  background: #312e81;
+  border-radius: 0.4rem;
+  transform: translateY(-150%);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
+.skip-link:focus { transform: translateY(0); }
+
+.app-header { background: #312e81; color: #fff; }
+
+.app-header__inner, .app-main {
+  width: min(100% - 2rem, 72rem);
   margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+}
+
+.app-header__inner {
   display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 4.5rem;
+  gap: 1rem;
 }
 
-body {
-  margin: 0;
+.brand { font-family: "Fira Code", monospace; font-weight: 700; text-decoration: none; }
+
+.app-header p { margin: 0; color: #c7d2fe; }
+
+.app-main { padding-block: 3rem; }
+
+.page-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
+.eyebrow { margin: 0 0 0.4rem; color: #4f46e5; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
+h1, h2 { color: #1e1b4b; margin-top: 0; }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
+h1 { margin-bottom: 0.5rem; font-family: "Fira Code", monospace; font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: -0.07em; }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+h2 { margin-bottom: 0.5rem; }
+
+.page-heading__description { max-width: 38rem; margin: 0; color: #4c4b68; font-size: 1.1rem; }
+
+.page-heading__status { padding: 0.45rem 0.7rem; color: #312e81; background: #e0e7ff; border: 1px solid #a5b4fc; border-radius: 999px; font-size: 0.85rem; font-weight: 700; white-space: nowrap; }
+
+.alert { margin-bottom: 1rem; padding: 1rem 1.1rem; border: 1px solid; border-radius: 0.6rem; font-weight: 600; }
+
+.alert--error { color: #991b1b; background: #fef2f2; border-color: #fecaca; }
+.alert--success { color: #166534; background: #f0fdf4; border-color: #bbf7d0; }
+
+.vehicles-page__error { display: flex; align-items: center; gap: 1rem; }
+.vehicles-page__error .alert { flex: 1; }
+
+.loading-indicator, .empty-state, .table-wrapper { background: #fff; border: 1px solid #c7d2fe; border-radius: 0.75rem; box-shadow: 0 1rem 2.5rem rgba(49, 46, 129, 0.08); }
+
+.loading-indicator { display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 3rem; color: #3730a3; font-weight: 700; }
+
+.loading-indicator__spinner { width: 1.25rem; height: 1.25rem; border: 3px solid #c7d2fe; border-top-color: #4f46e5; border-radius: 50%; animation: spin 0.8s linear infinite; }
+
+.empty-state { padding: 3rem 2rem; text-align: center; }
+.empty-state p { margin: 0; color: #4c4b68; }
+
+.table-wrapper { overflow-x: auto; }
+
+.vehicle-table { width: 100%; border-collapse: collapse; text-align: left; }
+.vehicle-table th, .vehicle-table td { padding: 1rem; border-bottom: 1px solid #e0e7ff; }
+.vehicle-table th { color: #3730a3; background: #eef2ff; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.vehicle-table tbody tr:last-child td { border-bottom: 0; }
+.vehicle-table tbody tr:hover { background: #f8faff; }
+.vehicle-table__actions { text-align: right; }
+
+.button { min-height: 2.5rem; padding: 0.55rem 0.9rem; border: 1px solid transparent; border-radius: 0.45rem; font-weight: 700; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
+.button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid #818cf8; outline-offset: 2px; }
+.button--primary { color: #fff; background: #4f46e5; }
+.button--primary:hover:not(:disabled) { background: #4338ca; }
+.button--secondary { color: #3730a3; background: #fff; border-color: #a5b4fc; }
+.button--secondary:hover:not(:disabled) { background: #eef2ff; }
+.button--danger { color: #b91c1c; background: #fff; border-color: #fca5a5; }
+.button--danger:hover:not(:disabled) { color: #fff; background: #dc2626; border-color: #dc2626; }
+.button:disabled { opacity: 0.55; }
+
+.pagination { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1rem; }
+.pagination__summary { margin: 0; color: #4c4b68; }
+.pagination__actions { display: flex; gap: 0.75rem; }
+
+.form-field { display: grid; gap: 0.4rem; }
+.form-field label { color: #312e81; font-weight: 700; }
+.form-field input { width: 100%; min-height: 2.75rem; padding: 0.55rem 0.7rem; color: #1e1b4b; background: #fff; border: 1px solid #a5b4fc; border-radius: 0.45rem; }
+.form-field input[aria-invalid="true"] { border-color: #dc2626; }
+.form-field__hint, .form-field__error { margin: 0; font-size: 0.9rem; }
+.form-field__hint { color: #4c4b68; }
+.form-field__error { color: #b91c1c; font-weight: 600; }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+@media (max-width: 640px) {
+  .app-header__inner, .page-heading, .pagination, .vehicles-page__error { align-items: stretch; flex-direction: column; }
+  .app-main { padding-block: 2rem; }
+  .page-heading { margin-bottom: 1.5rem; }
+  .vehicle-table thead { display: none; }
+  .vehicle-table, .vehicle-table tbody, .vehicle-table tr, .vehicle-table td { display: block; width: 100%; }
+  .vehicle-table tr { padding: 0.4rem 0; border-bottom: 1px solid #e0e7ff; }
+  .vehicle-table tbody tr:last-child { border-bottom: 0; }
+  .vehicle-table td { display: grid; grid-template-columns: minmax(7rem, 40%) 1fr; gap: 0.75rem; padding: 0.55rem 1rem; border: 0; }
+  .vehicle-table td::before { content: attr(data-label); color: #3730a3; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+  .vehicle-table__actions { align-items: center; text-align: left; }
+  .pagination__actions { width: 100%; }
+  .pagination__actions .button { flex: 1; }
 }
