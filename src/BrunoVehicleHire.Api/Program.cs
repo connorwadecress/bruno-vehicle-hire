@@ -8,10 +8,29 @@ using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var allowedFrontendOrigin = builder.Configuration["Cors:AllowedOrigin"]
+    ?? throw new InvalidOperationException(
+        "CORS allowed frontend origin was not configured.");
+
+const string frontendCorsPolicy = "Frontend";
+
 builder.Services.AddControllers();
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ApiExceptionHandler>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(frontendCorsPolicy, policy =>
+    {
+        policy
+            .WithOrigins(allowedFrontendOrigin)
+            .WithMethods("GET", "POST", "PUT", "DELETE")
+            .WithHeaders(
+                "Content-Type",
+                ApiKeyAuthenticationDefaults.HeaderName);
+    });
+});
 
 builder.Services
     .AddAuthentication(options =>
@@ -56,6 +75,7 @@ var app = builder.Build();
 
 app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseCors(frontendCorsPolicy);
 
 if (app.Environment.IsDevelopment())
 {
