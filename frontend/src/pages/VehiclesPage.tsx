@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import type { PagedResult } from '../models/api'
 import type { Vehicle } from '../models/vehicle'
 import { deleteVehicle, getVehicles } from '../services/vehicleService'
@@ -86,6 +87,12 @@ export function VehiclesPage() {
           </p>
         </div>
         <span className="page-heading__status">Live API list</span>
+      </div>
+
+      <div className="page-actions">
+        <Link className="button button--primary" to="/vehicles/new">
+          Add vehicle
+        </Link>
       </div>
 
       {successMessage ? <Alert variant="success">{successMessage}</Alert> : null}

@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import type { Vehicle } from '../models/vehicle'
 import { Button } from './Button'
 
@@ -43,14 +44,22 @@ export function VehicleTable({ deletingId, onDelete, vehicles }: VehicleTablePro
                 <td data-label="Year">{vehicle.year}</td>
                 <td data-label="Created">{formatCreatedDate(vehicle.createdDate)}</td>
                 <td className="vehicle-table__actions" data-label="Actions">
-                  <Button
-                    type="button"
-                    variant="danger"
-                    isLoading={isDeleting}
-                    onClick={() => onDelete(vehicle)}
-                  >
-                    Delete
-                  </Button>
+                  <div className="vehicle-table__action-buttons">
+                    <Link
+                      className="button button--secondary"
+                      to={`/vehicles/edit?registrationNumber=${encodeURIComponent(vehicle.registrationNumber)}`}
+                    >
+                      Edit
+                    </Link>
+                    <Button
+                      type="button"
+                      variant="danger"
+                      isLoading={isDeleting}
+                      onClick={() => onDelete(vehicle)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </td>
               </tr>
             )
