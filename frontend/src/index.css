@@ -128,6 +128,12 @@ h2 { margin-bottom: 0.5rem; }
 .form-field__hint { color: #4c4b68; }
 .form-field__error { color: #b91c1c; font-weight: 600; }
 
+.vehicle-form { display: grid; gap: 1rem; }
+.form-error-summary { padding: 1rem 1.1rem; color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; border-radius: 0.6rem; }
+.form-error-summary h2 { margin: 0 0 0.5rem; color: inherit; font-size: 1rem; }
+.form-error-summary ul { margin: 0; padding-left: 1.25rem; }
+.form-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+
 .placeholder-page { max-width: 42rem; padding: 2rem; background: #fff; border: 1px solid #c7d2fe; border-radius: 0.75rem; box-shadow: 0 1rem 2.5rem rgba(49, 46, 129, 0.08); }
 .placeholder-page p:not(.eyebrow) { margin: 0 0 1.5rem; color: #4c4b68; font-size: 1.05rem; }
 
@@ -155,4 +161,5 @@ h2 { margin-bottom: 0.5rem; }
   .vehicle-table__action-buttons .button { flex: 1; }
   .pagination__actions { width: 100%; }
   .pagination__actions .button { flex: 1; }
+  .form-actions .button { flex: 1; }
 }
