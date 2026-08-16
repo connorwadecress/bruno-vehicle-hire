@@ -1,17 +1,63 @@
-import { Link } from 'react-router'
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
+import { VehicleForm } from '../components/VehicleForm'
+import type { VehicleFormValues } from '../models/vehicle'
+import { getUserFacingError } from '../services/apiClient'
+import { createVehicle } from '../services/vehicleService'
+
+const initialValues: VehicleFormValues = {
+  registrationNumber: '',
+  make: '',
+  model: '',
+  year: new Date().getUTCFullYear().toString(),
+}
 
 export function CreateVehiclePage() {
+  const navigate = useNavigate()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [serverError, setServerError] = useState<string>()
+
+  async function handleSubmit(values: VehicleFormValues) {
+    setIsSubmitting(true)
+    setServerError(undefined)
+
+    try {
+      await createVehicle({
+        registrationNumber: values.registrationNumber,
+        make: values.make,
+        model: values.model,
+        year: Number(values.year),
+      })
+      navigate('/')
+    } catch (error) {
+      setServerError(getUserFacingError(error))
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
-    <section className="placeholder-page" aria-labelledby="create-vehicle-heading">
-      <p className="eyebrow">Vehicles</p>
-      <h1 id="create-vehicle-heading">Add vehicle</h1>
-      <p>
-        The create form will be added in the next milestone. This route already
-        gives that task a stable, refresh-safe URL.
-      </p>
-      <Link className="button button--secondary" to="/">
-        Back to vehicle inventory
-      </Link>
+    <section className="vehicle-form-page" aria-labelledby="create-vehicle-heading">
+      <div className="page-heading">
+        <div>
+          <p className="eyebrow">Vehicles</p>
+          <h1 id="create-vehicle-heading">Add vehicle</h1>
+          <p className="page-heading__description">
+            Add an active vehicle to the Bruno Vehicle Hire fleet.
+          </p>
+        </div>
+      </div>
+
+      <div className="form-panel">
+        <VehicleForm
+          mode="create"
+          initialValues={initialValues}
+          isSubmitting={isSubmitting}
+          serverError={serverError}
+          onSubmit={handleSubmit}
+          onCancel={() => navigate('/')}
+        />
+      </div>
     </section>
   )
 }
