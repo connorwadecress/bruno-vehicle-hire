@@ -80,13 +80,8 @@ export function VehiclesPage() {
     <section className="vehicles-page" aria-labelledby="vehicles-heading">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">Operations</p>
           <h1 id="vehicles-heading">Vehicle inventory</h1>
-          <p className="page-heading__description">
-            View active vehicles and keep the hire fleet accurate.
-          </p>
         </div>
-        <span className="page-heading__status">Live API list</span>
       </div>
 
       <div className="page-actions">
