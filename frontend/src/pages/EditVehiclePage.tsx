@@ -94,7 +94,6 @@ export function EditVehiclePage() {
   if (loadError) {
     return (
       <section className="vehicle-form-page" aria-labelledby="edit-vehicle-heading">
-        <p className="eyebrow">Vehicles</p>
         <h1 id="edit-vehicle-heading">Edit vehicle</h1>
         <Alert variant="error">{loadError}</Alert>
         <Link className="button button--secondary" to="/">
@@ -112,9 +111,6 @@ export function EditVehiclePage() {
         <div>
           <p className="eyebrow">Vehicles</p>
           <h1 id="edit-vehicle-heading">Edit vehicle</h1>
-          <p className="page-heading__description">
-            Update the active fleet details for {vehicle.registrationNumber}.
-          </p>
         </div>
       </div>
 

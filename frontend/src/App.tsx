@@ -10,10 +10,6 @@ function App() {
           <Link className="brand" to="/" aria-label="Bruno Vehicle Hire home">
             Bruno Vehicle Hire
           </Link>
-          <nav className="app-navigation" aria-label="Primary navigation">
-            <Link to="/">Vehicle inventory</Link>
-            <Link to="/vehicles/new">Add vehicle</Link>
-          </nav>
         </div>
       </header>
       <main id="main-content" className="app-main">

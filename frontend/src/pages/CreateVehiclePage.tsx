@@ -40,11 +40,7 @@ export function CreateVehiclePage() {
     <section className="vehicle-form-page" aria-labelledby="create-vehicle-heading">
       <div className="page-heading">
         <div>
-          <p className="eyebrow">Vehicles</p>
           <h1 id="create-vehicle-heading">Add vehicle</h1>
-          <p className="page-heading__description">
-            Add an active vehicle to the Bruno Vehicle Hire fleet.
-          </p>
         </div>
       </div>
 
