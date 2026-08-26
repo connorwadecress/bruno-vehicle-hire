@@ -1,12 +1,16 @@
+using BrunoVehicleHire.Application.Common.Exceptions;
 using BrunoVehicleHire.Domain.Entities;
 using BrunoVehicleHire.Domain.Repositories;
 using BrunoVehicleHire.Infrastructure.Persistence;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 namespace BrunoVehicleHire.Infrastructure.Repositories;
 
 public class VehicleRepository : IVehicleRepository
 {
+    private const int SqliteConstraintViolation = 19;
+
     private readonly BrunoVehicleHireDbContext _dbContext;
 
     public VehicleRepository(BrunoVehicleHireDbContext dbContext)
@@ -61,8 +65,28 @@ public class VehicleRepository : IVehicleRepository
         await _dbContext.Vehicles.AddAsync(vehicle, cancellationToken);
     }
 
-    public Task SaveChangesAsync(CancellationToken cancellationToken)
+    public async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        return _dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception) when (IsRegistrationNumberConflict(exception))
+        {
+            throw new DuplicateVehicleRegistrationException();
+        }
+    }
+
+    // The handler's existence check gives a friendly 409 on the normal path, but two concurrent
+    // creates can both pass it. The unique index is what actually prevents the duplicate row, and
+    // SQLite reports that as "UNIQUE constraint failed: Vehicles.RegistrationNumber". Only that
+    // specific failure becomes a duplicate-registration conflict - anything else keeps bubbling.
+    private static bool IsRegistrationNumberConflict(DbUpdateException exception)
+    {
+        return exception.InnerException is SqliteException sqliteException
+            && sqliteException.SqliteErrorCode == SqliteConstraintViolation
+            && sqliteException.Message.Contains(
+                "Vehicles.RegistrationNumber",
+                StringComparison.OrdinalIgnoreCase);
     }
 }
