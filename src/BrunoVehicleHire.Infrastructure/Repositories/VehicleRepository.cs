@@ -56,7 +56,11 @@ public class VehicleRepository : IVehicleRepository
         var normalizedRegistrationNumber = registrationNumber.Trim().ToUpperInvariant();
 
         return _dbContext.Vehicles
-            .IgnoreQueryFilters()
+            .IgnoreQueryFilters() // in testing what happens if i remove this  - the system still refuses the dplucate 
+            // the data contraint is the fall back that still prevents this 
+
+            //the reaspm for this is cost - its cheaper to have a c# exception than a SQL exceptin -> thats a code smell
+
             .AnyAsync(vehicle => vehicle.RegistrationNumber == normalizedRegistrationNumber, cancellationToken);
     }
 

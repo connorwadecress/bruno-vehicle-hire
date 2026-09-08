@@ -2,6 +2,7 @@
 
 namespace BrunoVehicleHire.Application.Vehicles.Dtos;
 
+//outbound http contract
 public sealed record VehicleDto(
     Guid Id,
     string RegistrationNumber,

@@ -20,16 +20,19 @@ public sealed class CreateVehicleCommandHandler
         CreateVehicleCommand request,
         CancellationToken cancellationToken)
     {
+        //existence check
         var registrationNumberExists =
             await _vehicleRepository.RegistrationNumberExistsAsync(
                 request.RegistrationNumber,
                 cancellationToken);
 
+        //duplicate exception
         if (registrationNumberExists)
         {
             throw new DuplicateVehicleRegistrationException();
         }
 
+        //construct the vehicle
         var vehicle = new Vehicle(
             request.RegistrationNumber,
             request.Make,

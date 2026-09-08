@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BrunoVehicleHire.Api.Controllers;
 
+//depends on a command type and an interface
+//not on a handler class - API layer has no compile knowledge of the code that does the work 
 [ApiController]
 [Route("api/vehicles")]
 [Produces("application/json")]
@@ -63,6 +65,7 @@ public sealed class VehiclesController(ISender sender) : ControllerBase
             : Ok(result);
     }
 
+    // controller → handler → domain constructor → repository → database
     [HttpPost]
     [ProducesResponseType(
         typeof(VehicleDto),
@@ -77,12 +80,17 @@ public sealed class VehiclesController(ISender sender) : ControllerBase
         [FromBody] CreateVehicleRequest request,
         CancellationToken cancellationToken)
     {
+        //bind to this body
         var command = new CreateVehicleCommand(
             request.RegistrationNumber,
             request.Make,
             request.Model,
             request.Year);
 
+        //calls this command - mediatR resolves the handler from the commands type
+        //controller has no idea CreateVehicleCommandHandler exists
+
+        //handler depends on interface
         var result = await sender.Send(
             command,
             cancellationToken);

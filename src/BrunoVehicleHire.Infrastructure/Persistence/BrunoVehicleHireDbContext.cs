@@ -47,6 +47,7 @@ public class BrunoVehicleHireDbContext : DbContext
                 .IsRequired()
                 .HasDefaultValue(false);
 
+            // global query filter applies to every LINQ query
             entity.HasQueryFilter(vehicle => !vehicle.IsDeleted);
         });
     }

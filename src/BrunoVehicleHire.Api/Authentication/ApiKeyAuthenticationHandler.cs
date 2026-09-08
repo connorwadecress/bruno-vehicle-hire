@@ -23,6 +23,7 @@ public sealed class ApiKeyAuthenticationHandler
         _configuration = configuration;
     }
 
+    // Who are you?
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         if (!Request.Headers.TryGetValue(
@@ -85,7 +86,7 @@ public sealed class ApiKeyAuthenticationHandler
         var expectedHash = SHA256.HashData(
             Encoding.UTF8.GetBytes(expectedApiKey));
 
-        return CryptographicOperations.FixedTimeEquals(
+        return CryptographicOperations.FixedTimeEquals( //added this hardening as its an industrry standard prevent against timing attacks. 
             providedHash,
             expectedHash);
     }
