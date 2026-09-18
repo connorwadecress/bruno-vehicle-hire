@@ -24,7 +24,7 @@ public sealed class GetVehiclesPageQueryHandler
             request.PageSize,
             cancellationToken);
 
-        var totalCount = await _vehicleRepository.CountAsync(cancellationToken);
+        var totalCount = await _vehicleRepository.CountAsync(cancellationToken); 
 
         var vehicleDtos = vehicles
             .Select(VehicleDto.FromEntity)

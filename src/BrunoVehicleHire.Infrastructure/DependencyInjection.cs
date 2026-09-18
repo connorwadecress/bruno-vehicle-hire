@@ -17,7 +17,8 @@ public static class DependencyInjection
             options.UseSqlite(connectionString);
         });
 
-        services.AddScoped<IVehicleRepository, VehicleRepository>();
+        services.AddScoped<IVehicleRepository, VehicleRepository>(); //one per request
+                                                                     //because we want to share the same DbContext instance across the request
 
         return services;
     }

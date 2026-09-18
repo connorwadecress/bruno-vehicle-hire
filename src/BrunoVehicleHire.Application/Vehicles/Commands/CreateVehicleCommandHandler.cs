@@ -6,8 +6,12 @@ using MediatR;
 
 namespace BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
 
-public sealed class CreateVehicleCommandHandler
+public sealed class CreateVehicleCommandHandler //sealed blocks inheritance
     : IRequestHandler<CreateVehicleCommand, VehicleDto>
+    // this handler shouldnt be extended - its complete 
+    // to extend this you will create a new handler 
+
+    //anyway its missing virtual 
 {
     private readonly IVehicleRepository _vehicleRepository;
 
@@ -39,6 +43,7 @@ public sealed class CreateVehicleCommandHandler
             request.Model,
             request.Year);
 
+        // add and save c hanges are split because of unit of work pattern - you can add multiple entities and then save changes once
         await _vehicleRepository.AddAsync(vehicle, cancellationToken);
         await _vehicleRepository.SaveChangesAsync(cancellationToken);
 

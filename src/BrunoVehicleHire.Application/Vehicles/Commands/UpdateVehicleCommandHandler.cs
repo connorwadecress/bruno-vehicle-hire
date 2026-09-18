@@ -27,12 +27,14 @@ public sealed class UpdateVehicleCommandHandler
             return null;
         }
 
-        vehicle.Update(
+        vehicle.Update( //this is all that it needs in order to do an update. The `GetByIdAsync` loads the vehicle with a tracked query.
+                        //There is no explicit tracking so Entity Framework snapshots its values the moment it's loaded and then we'll mutate it later.
+
             request.Make,
             request.Model,
             request.Year);
 
-        await _vehicleRepository.SaveChangesAsync(cancellationToken);
+        await _vehicleRepository.SaveChangesAsync(cancellationToken); 
 
         return VehicleDto.FromEntity(vehicle);
     }

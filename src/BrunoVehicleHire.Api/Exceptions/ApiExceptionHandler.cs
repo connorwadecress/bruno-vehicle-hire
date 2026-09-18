@@ -7,20 +7,21 @@ namespace BrunoVehicleHire.Api.Exceptions;
 
 public sealed class ApiExceptionHandler(
     ILogger<ApiExceptionHandler> logger) : IExceptionHandler
+    // Single Responsibility (or is it??)
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,
         Exception exception,
         CancellationToken cancellationToken)
     {
-        ProblemDetails problemDetails = exception switch
+        ProblemDetails problemDetails = exception switch // deciding problem details and writing response is one responsibility
         {
             ValidationException validationException =>
                 CreateValidationProblemDetails(
                     httpContext,
                     validationException),
 
-            DuplicateVehicleRegistrationException => new ProblemDetails
+            DuplicateVehicleRegistrationException => new ProblemDetails 
             {
                 Status = StatusCodes.Status409Conflict,
                 Title = "Registration number already exists.",
@@ -40,7 +41,8 @@ public sealed class ApiExceptionHandler(
         if (exception is ValidationException
             or DuplicateVehicleRegistrationException)
         {
-            logger.LogWarning(
+            logger.LogWarning( //logging is actually a second concern - but its convenient to log at the same spot 
+                // best practice is to push logging out to middle ware or decotrator 
                 exception,
                 "Request failed for {Path}.",
                 httpContext.Request.Path);

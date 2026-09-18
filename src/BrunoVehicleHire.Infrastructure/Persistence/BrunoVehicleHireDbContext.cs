@@ -23,11 +23,13 @@ public class BrunoVehicleHireDbContext : DbContext
             entity.HasKey(vehicle => vehicle.Id);
 
             entity.Property(vehicle => vehicle.RegistrationNumber)
-                .IsRequired()
+                .IsRequired() //generates real not null column in database
+                // if removed the compiler would not catch
                 .HasMaxLength(20);
 
             entity.HasIndex(vehicle => vehicle.RegistrationNumber)
-                .IsUnique();
+                .IsUnique(); //performance index -> to make lookips and sort by registration number  faster
+            // if we remove it then RegistrationNumberExistsAsync will be slower because it will have to scan the entire table to check for existence
 
             entity.Property(vehicle => vehicle.Make)
                 .IsRequired()

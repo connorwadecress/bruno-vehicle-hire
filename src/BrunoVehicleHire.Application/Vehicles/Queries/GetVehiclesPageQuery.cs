@@ -4,6 +4,6 @@ using MediatR;
 
 namespace BrunoVehicleHire.Application.Vehicles.Queries.GetVehiclesPage;
 
-public sealed record GetVehiclesPageQuery(
+public sealed record GetVehiclesPageQuery( //record doesnt gurantee immutability 
     int PageNumber,
     int PageSize) : IRequest<PagedResult<VehicleDto>>;

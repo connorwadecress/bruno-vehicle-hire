@@ -34,7 +34,7 @@ public sealed class VehiclesController(ISender sender) : ControllerBase
             pageNumber,
             pageSize);
 
-        var result = await sender.Send(
+        var result = await sender.Send( 
             query,
             cancellationToken);
 
@@ -91,11 +91,12 @@ public sealed class VehiclesController(ISender sender) : ControllerBase
         //controller has no idea CreateVehicleCommandHandler exists
 
         //handler depends on interface
-        var result = await sender.Send(
+        var result = await sender.Send( //mediator pattern - hub and spoke - using sender.send - objects never reference each other directly 
             command,
             cancellationToken);
 
-        return CreatedAtAction(
+        return CreatedAtAction( // response body is full VehicleDto - not just the id - so that the client can use it immediately without having to make another request
+            // location header is built from registration number 
             nameof(GetByRegistrationNumber),
             new
             {

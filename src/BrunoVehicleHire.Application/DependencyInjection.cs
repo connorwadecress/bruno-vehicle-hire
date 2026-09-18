@@ -23,6 +23,9 @@ public static class DependencyInjection
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
 
+        //singleton would mean one instance for the whole apps life -
+        // if singleton depended on scoped service then DI one grab one instance first time and reuse it for every future reques
+
         return services;
     }
 }

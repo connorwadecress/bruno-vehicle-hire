@@ -14,7 +14,11 @@ public sealed class CreateVehicleCommandValidator
         // the duplocate check needs to hit the reposutory and decide what exception to throw, so that is done in the handler
         RuleFor(command => command.RegistrationNumber)
             .NotEmpty()
-            .MaximumLength(20);
+            .MaximumLength(20); // we have 2 places we check this. here and in the DbContext 
+        // fleunt validation only runs if a request goes through MediatR pipeline
+        //DbContext constraint protects against every writer (second app / raw SQL script, bad migration, db access etc) - its a unique index on the column in the database
+
+        // if this business logic changes we have to update in 2 places
 
         RuleFor(command => command.Make)
             .NotEmpty()
