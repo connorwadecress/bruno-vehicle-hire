@@ -23,7 +23,7 @@ export function VehiclesPage() {
   const [refreshVersion, setRefreshVersion] = useState(0)
   const [successMessage, setSuccessMessage] = useState<string>()
 
-  useEffect(() => {
+  useEffect(() => { // no "run now" button -> so to make it run, we need something to change in the dependency array [a, b]
     const controller = new AbortController()
 
     async function loadVehicles() {
@@ -44,10 +44,11 @@ export function VehiclesPage() {
     void loadVehicles()
 
     return () => controller.abort()
-  }, [pageNumber, refreshVersion])
+  }, [pageNumber, refreshVersion]) //this type of use effect runs on mount and whenever [a, b] changes. 
+  //so if pageNumber changes or if refreshVersion changes, it will re-run and fetch new data
 
   function refreshPage() {
-    setRefreshVersion((current) => current + 1)
+    setRefreshVersion((current) => current + 1) //technically meaningless -> act as doorbell ... it ringing useeffect 
   }
 
   async function handleDelete(vehicle: Vehicle) {
