@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BrunoVehicleHire.Infrastructure.Persistence;
 
-public class BrunoVehicleHireDbContext : DbContext
+public class BrunoVehicleHireDbContext : DbContext //framework inheritance
 {
     public BrunoVehicleHireDbContext(DbContextOptions<BrunoVehicleHireDbContext> options)
         : base(options)

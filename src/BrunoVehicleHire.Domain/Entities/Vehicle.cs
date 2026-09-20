@@ -29,7 +29,7 @@ public class Vehicle
 
     //all mutations have to go through the constructor
 
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; } //public read; private write - and no setter methods. only way to change is through the constructor or the Update method or SoftDelete method
     public string RegistrationNumber { get; private set; } = string.Empty;
     public string Make { get; private set; } = string.Empty;
     public string Model { get; private set; } = string.Empty;

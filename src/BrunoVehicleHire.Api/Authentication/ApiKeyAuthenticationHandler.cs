@@ -9,7 +9,7 @@ using Microsoft.Extensions.Primitives;
 namespace BrunoVehicleHire.Api.Authentication;
 
 public sealed class ApiKeyAuthenticationHandler
-    : AuthenticationHandler<AuthenticationSchemeOptions>
+    : AuthenticationHandler<AuthenticationSchemeOptions> //framework inheritance
 {
     private readonly IConfiguration _configuration;
 

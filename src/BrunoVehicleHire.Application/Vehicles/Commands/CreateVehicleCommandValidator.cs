@@ -3,7 +3,7 @@
 namespace BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
 
 public sealed class CreateVehicleCommandValidator
-    : AbstractValidator<CreateVehicleCommand>
+    : AbstractValidator<CreateVehicleCommand> //framework inheritance
 {
     public CreateVehicleCommandValidator()
     {

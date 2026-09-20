@@ -16,7 +16,12 @@ namespace BrunoVehicleHire.Api.Controllers;
 [ApiController]
 [Route("api/vehicles")]
 [Produces("application/json")]
-public sealed class VehiclesController(ISender sender) : ControllerBase
+public sealed class VehiclesController(ISender sender) : ControllerBase // the only inheritance we use is from framework base classes -
+                                                                        // we dont use inheritance in our own code -
+                                                                        // we use composition and interfaces instead
+
+    // favour composittion over inheritance
+
 {
     [HttpGet]
     [ProducesResponseType(
