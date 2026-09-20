@@ -23,7 +23,8 @@ public sealed class ApiKeyAuthenticationHandler
         _configuration = configuration;
     }
 
-    // Who are you?
+    //this one is abstract on the base - no default behaviour so theres no base to call
+    //compare OnModelCreating in the DbContext - thats virtual, has a default, so we call base there
     protected override Task<AuthenticateResult> HandleAuthenticateAsync()
     {
         if (!Request.Headers.TryGetValue(

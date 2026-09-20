@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BrunoVehicleHire.Infrastructure.Persistence;
 
+//framework inheritance is the only kind we use - EF owns the contract and calls us back
+//we inherit to fill a slot someone designed, not to reuse code
 public class BrunoVehicleHireDbContext : DbContext //framework inheritance
 {
     public BrunoVehicleHireDbContext(DbContextOptions<BrunoVehicleHireDbContext> options)

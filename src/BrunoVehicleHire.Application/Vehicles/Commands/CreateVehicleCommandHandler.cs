@@ -13,6 +13,8 @@ public sealed class CreateVehicleCommandHandler //sealed blocks inheritance
 
     //anyway its missing virtual 
 {
+    //has-a not is-a - we hold the repo, we dont inherit from it. thats composition
+    //this is what lets the tests swap in InMemoryVehicleRepository without touching this class
     private readonly IVehicleRepository _vehicleRepository;
 
     public CreateVehicleCommandHandler(IVehicleRepository vehicleRepository)
