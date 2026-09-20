@@ -12,6 +12,8 @@ import { VehicleTable } from '../components/VehicleTable'
 
 const pageSize = 10
 
+//renders once with no data - then isLoading is true -> then calls getVehicles 
+// spinner starts - then useEffect runs and fetches data - then isLoading is false and data is displayed
 export function VehiclesPage() {
   const [deletingId, setDeletingId] = useState<string>()
   const [error, setError] = useState<string>()
@@ -29,7 +31,7 @@ export function VehiclesPage() {
       setError(undefined)
 
       try {
-        const result = await getVehicles(pageNumber, pageSize, controller.signal)
+        const result = await getVehicles(pageNumber, pageSize, controller.signal) //to vehicle service
         setPage(result)
       } catch (requestError) {
         if (requestError instanceof DOMException && requestError.name === 'AbortError') return

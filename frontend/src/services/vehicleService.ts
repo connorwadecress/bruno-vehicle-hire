@@ -6,7 +6,7 @@ import type {
 } from '../models/vehicle'
 import { apiRequest } from './apiClient'
 
-export function getVehicles(
+export function getVehicles( //fetches a list of vehicles with pagination
   pageNumber: number,
   pageSize: number,
   signal?: AbortSignal,

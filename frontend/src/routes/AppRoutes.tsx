@@ -4,6 +4,7 @@ import { EditVehiclePage } from '../pages/EditVehiclePage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 import { VehiclesPage } from '../pages/VehiclesPage'
 
+//mathces the URL / to VehiclesPage
 export function AppRoutes() {
   return (
     <Routes>

@@ -6,6 +6,9 @@ export type VehicleFormErrors = Partial<
 
 export type VehicleFormMode = 'create' | 'edit'
 
+// logic - not a type. might not belong in models/
+// kept it cause it tightlyh coupled with VehicleFormValues which is a model
+// i would move this file if the validation grew
 export function validateVehicleForm(
   values: VehicleFormValues,
   mode: VehicleFormMode,

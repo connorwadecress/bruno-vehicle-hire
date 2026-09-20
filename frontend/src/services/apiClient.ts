@@ -43,7 +43,7 @@ export async function apiRequest<T>(
   let response: Response
 
   try {
-    response = await fetch(`${appConfig.apiBaseUrl}${path}`, {
+    response = await fetch(`${appConfig.apiBaseUrl}${path}`, { //fetches with X-API-KEY header
       ...options,
       headers,
     })

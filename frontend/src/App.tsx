@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { AppRoutes } from './routes/AppRoutes'
 
+// renders header, skip link, and app routes
 function App() {
   return (
     <>
