@@ -1,7 +1,8 @@
 import type { ProblemDetails } from '../models/api'
 import { appConfig } from './config'
 
-export class ApiError extends Error {
+//repository pattern by using this instead of handling it all in vehicleservice
+export class ApiError extends Error { 
   public readonly status: number
   public readonly problem?: ProblemDetails
 
@@ -42,6 +43,8 @@ export async function apiRequest<T>(
 
   let response: Response
 
+  //two totally different kinds of failure below - this catch, and the !response.ok check
+  //this one = the request never completed. no connection, wrong port, dodgy cert
   try {
     response = await fetch(`${appConfig.apiBaseUrl}${path}`, { //fetches with X-API-KEY header
       ...options,
@@ -54,13 +57,16 @@ export async function apiRequest<T>(
 
     throw new ApiError(
       'The API could not be reached. Confirm that it is running and trusted.',
-      0,
+      0,  //theres no response at all so theres no status either - thats why we pass 0
     )
   }
 
+  //fetch only rejects if it never got an answer - a bad answer is still an answer
+  //so 400/401/404/409/500 all land HERE, not in the catch above. fetch is perfectly happy
+  //without this check a 409 duplicate would look like success and the create page would navigate away
   if (!response.ok) {
     const contentType = response.headers.get('content-type') ?? ''
-    const problem = contentType.includes('application/problem+json')
+    const problem = contentType.includes('application/problem+json') 
       ? (await response.json()) as ProblemDetails
       : undefined
 
@@ -72,7 +78,8 @@ export async function apiRequest<T>(
   }
 
   if (response.status === 204) {
-    return undefined as T
+    return undefined as T // success with no body. -> calling .json() would throw an error
+    // using the cast will satisfy the compiler and return as undefined -> so we are lying to typescript here
   }
 
   return await response.json() as T
