@@ -6,6 +6,8 @@ namespace BrunoVehicleHire.Infrastructure.Persistence;
 //framework inheritance is the only kind we use - EF owns the contract and calls us back
 //we inherit to fill a slot someone designed, not to reuse code
 public class BrunoVehicleHireDbContext : DbContext //framework inheritance
+                                                   //scoped lifetime - one per request -
+                                                   //we dont want to share it between requests because it has a change tracker and we dont want to share that
 {
     public BrunoVehicleHireDbContext(DbContextOptions<BrunoVehicleHireDbContext> options)
         : base(options)
@@ -14,7 +16,7 @@ public class BrunoVehicleHireDbContext : DbContext //framework inheritance
 
     public DbSet<Vehicle> Vehicles => Set<Vehicle>();
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder) 
     {
         base.OnModelCreating(modelBuilder);
 

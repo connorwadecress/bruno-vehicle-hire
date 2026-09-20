@@ -5,6 +5,8 @@ namespace BrunoVehicleHire.Application.Vehicles.Commands.CreateVehicle;
 public sealed class CreateVehicleCommandValidator
     : AbstractValidator<CreateVehicleCommand> //framework inheritance
     //same deal as the DbContext - fluent validation designed this slot, we just fill it
+
+    // scoped (defailt from AddValidatorsFromAssembly
 {
     public CreateVehicleCommandValidator()
     {

@@ -7,7 +7,10 @@ namespace BrunoVehicleHire.Api.Exceptions;
 
 public sealed class ApiExceptionHandler(
     ILogger<ApiExceptionHandler> logger) : IExceptionHandler
-    // Single Responsibility (or is it??)
+// Single Responsibility (or is it??)
+
+//singleton
+// -> safe as its one dependnecy is logger which is thread safe
 {
     public async ValueTask<bool> TryHandleAsync(
         HttpContext httpContext,

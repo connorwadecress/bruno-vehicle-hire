@@ -3,6 +3,7 @@
 namespace BrunoVehicleHire.Domain.Repositories;
 
 public interface IVehicleRepository // consumers depend on this - consumers dont care which implementation they get (infrastructure or in memory)
+    //scoped 
 {
     Task<Vehicle?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<Vehicle?> GetByRegistrationNumberAsync(string registrationNumber, CancellationToken cancellationToken);
