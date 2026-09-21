@@ -25,6 +25,10 @@ export function getUserFacingError(error: unknown): string {
 }
 
 function getErrorMessage(problem: ProblemDetails | undefined, status: number) {
+  // errors is the per-field dictionary off ValidationProblemDetails - most specific, so check it first
+  const fieldErrors = problem?.errors && Object.values(problem.errors).flat()
+  if (fieldErrors?.length) return fieldErrors.join(' ')
+
   if (problem?.detail) return problem.detail
   if (problem?.title) return problem.title
   return `The request failed with status ${status}.`
@@ -66,8 +70,11 @@ export async function apiRequest<T>(
   //without this check a 409 duplicate would look like success and the create page would navigate away
   if (!response.ok) {
     const contentType = response.headers.get('content-type') ?? ''
-    const problem = contentType.includes('application/problem+json') 
-      ? (await response.json()) as ProblemDetails
+    //any json will do - matching on application/problem+json only was too strict and
+    //turned every real message into "The request failed with status X"
+    //.catch covers an error response that claims json but sends an empty body
+    const problem = contentType.includes('json')
+      ? (await response.json().catch(() => undefined)) as ProblemDetails | undefined
       : undefined
 
     throw new ApiError(

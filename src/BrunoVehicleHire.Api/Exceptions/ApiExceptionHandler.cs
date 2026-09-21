@@ -62,10 +62,16 @@ public sealed class ApiExceptionHandler(
             problemDetails.Status
             ?? StatusCodes.Status500InternalServerError;
 
-        httpContext.Response.ContentType = "application/problem+json";
+        // dont set ContentType here - WriteAsJsonAsync overwrites it with
+        // application/json and the frontend stops recognising the body as a problem
 
         await httpContext.Response.WriteAsJsonAsync(
             problemDetails,
+            problemDetails.GetType(), // runtime type, not ProblemDetails -
+            // otherwise System.Text.Json serialises the base type only and drops
+            // ValidationProblemDetails.errors on the floor
+            options: null,
+            contentType: "application/problem+json",
             cancellationToken);
 
         return true;
