@@ -90,5 +90,7 @@ public sealed class ApiKeyAuthenticationHandler
         return CryptographicOperations.FixedTimeEquals( //added this hardening as its an industrry standard prevent against timing attacks. 
             providedHash,
             expectedHash);
+        //Constant-time comparison is correct practice for comparing any secret, and I'd keep it.
+        //It just isn't what's protecting this application, and I wouldn't present it as though it were."
     }
 }
