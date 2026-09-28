@@ -22,7 +22,7 @@ Every endpoint needs an `X-API-Key` header.
 
 ## How it is put together
 
-Four projects under `src/`, plus one test project:
+Four projects under `src/`, plus two test projects:
 
 | Project | Holds |
 | --- | --- |
@@ -146,9 +146,18 @@ npm run lint
 npm run build
 ```
 
-The test project covers the create command handler (success and duplicate) and
-the paginated query handler, using a hand-written in-memory repository rather
-than a mocking library. I wanted the test double to be something I could read.
+Eight tests across two projects.
+
+`Application.Tests` covers the create command handler (success and duplicate)
+and the paginated query handler, using a hand-written in-memory repository
+rather than a mocking library. I wanted the test double to be something I could
+read.
+
+`Infrastructure.Tests` runs against a real SQLite database held in memory, so
+the things that only exist at the database level are actually exercised rather
+than simulated: the unique index rejecting a duplicate, the soft-delete query
+filter excluding deleted vehicles from both the list and the registration
+lookup, and a soft-deleted plate still blocking re-registration.
 
 ## Decisions worth explaining
 
@@ -170,6 +179,16 @@ plate would pass the check and then blow up on the insert.
 first so the user gets a clean 409, and the unique index is the real guarantee.
 The check is for the message, the index is for correctness.
 
+**Handling the race between those two.** The existence check and the insert are
+not atomic, so two simultaneous POSTs with the same registration can both pass
+the check. The unique index stops the bad row either way, but the second request
+used to surface as a generic 500. `VehicleRepository` now catches that specific
+constraint failure and throws the same `DuplicateVehicleRegistrationException`
+the handler throws, so both the normal path and the race return a clean 409.
+The translation lives in Infrastructure because that is the only layer that
+should know SQLite exists - `ApiExceptionHandler` needed no changes at all,
+which is how I know it went in the right place.
+
 **`fetch` rather than Axios.** Everything I needed from Axios here (base URL,
 default headers, error normalisation) is about fifteen lines in
 `services/apiClient.ts`, and it saves a dependency. I would use Axios if I
@@ -184,25 +203,21 @@ refresh.
 
 Things I know about and would fix next, in order:
 
-1. **Concurrent duplicate creates.** Two simultaneous POSTs with the same
-   registration can both pass the existence check. The database unique index
-   still stops the bad write, so the data stays correct, but the second request
-   currently surfaces as a 500 instead of a 409. The fix is to translate that
-   specific constraint failure at the persistence boundary.
-2. **The API key is not a real secret on the frontend.** Vite substitutes
+1. **The API key is not a real secret on the frontend.** Vite substitutes
    `VITE_API_KEY` into the bundle at build time, so anyone can read it in
    devtools. It satisfies the header-based API key requirement and blocks casual
    unauthenticated calls, but it cannot identify a user. A real design would use
    proper user authentication, or a backend-for-frontend holding the secret
    server side. CORS does not help here either, since it only constrains
    browsers.
-3. **No frontend tests.** `validateVehicleForm` is a pure function and would be
+2. **No frontend tests.** `validateVehicleForm` is a pure function and would be
    the obvious first one.
-4. **No integration tests.** The unit tests prove the handlers. They do not
-   prove the auth handler, the 401 path, the problem-details mapping, or the
-   database constraint. One `WebApplicationFactory` group over SQLite would
-   cover all of it.
-5. **Delete uses `window.confirm`.** Fine for this, but a real product needs a
+3. **No end-to-end API tests.** The unit tests prove the handlers and the
+   infrastructure tests prove the database behaviour, but nothing exercises a
+   real HTTP request: the auth handler, the 401 path, the problem-details
+   mapping, or the controller status codes. One `WebApplicationFactory` group
+   would cover all of it.
+4. **Delete uses `window.confirm`.** Fine for this, but a real product needs a
    proper focus-trapped dialog.
 
 ## Where to look first
