@@ -9,7 +9,7 @@ namespace BrunoVehicleHire.Infrastructure.Repositories;
 
 public class VehicleRepository : IVehicleRepository
 {
-    private const int SqliteConstraintViolation = 19;
+    private const int SqliteConstraintViolation = 19; //SQLITE_CONSTRAINT - too broad on its own, also fires for NOT NULL/CHECK, hence message check below
 
     private readonly BrunoVehicleHireDbContext _dbContext;
 
@@ -75,16 +75,16 @@ public class VehicleRepository : IVehicleRepository
         {
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
-        catch (DbUpdateException exception) when (IsRegistrationNumberConflict(exception))
+        catch (DbUpdateException exception) when (IsRegistrationNumberConflict(exception)) // not business logic... its translation for database enforced constraits 
+        // if we add more unique constraints, the refactor is a small map from the contraint name to exception type or IDbExceptionTranslator
         {
             throw new DuplicateVehicleRegistrationException();
         }
     }
 
-    // The handler's existence check gives a friendly 409 on the normal path, but two concurrent
-    // creates can both pass it. The unique index is what actually prevents the duplicate row, and
-    // SQLite reports that as "UNIQUE constraint failed: Vehicles.RegistrationNumber". Only that
-    // specific failure becomes a duplicate-registration conflict - anything else keeps bubbling.
+    // gives 409 on normal path but doesnt accomodate for 2 concurent creates
+    // unique index prevents duplicate row -> SQLite reports "UNIQUE constraint failed: Vehicles.RegistrationNumber"
+    // now we check for that specific failure and translates to "duplicate-registration conflict"
     private static bool IsRegistrationNumberConflict(DbUpdateException exception)
     {
         return exception.InnerException is SqliteException sqliteException
